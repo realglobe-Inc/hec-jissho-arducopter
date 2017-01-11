@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es5",
+        "lib": [
+            "dom",
+            "es2017"
+        ],
+        "jsx": "react",
+        "noFallthroughCasesInSwitch": true,
+        "skipDefaultLibCheck": true,
+        "skipLibCheck": false,
+        "sourceMap": true,
+        "listFiles": true,
+        "newLine": "LF",
+        "noEmitOnError": true
+    },
+    "compileOnSave": false,
+    "include": [
+      "ui/js/*",
+      "ui/js/**/*"
+    ]
+}

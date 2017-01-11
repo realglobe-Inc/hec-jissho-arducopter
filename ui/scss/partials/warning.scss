@@ -1,0 +1,22 @@
+.warning-display {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: rgba(255,0,0,0.6);
+  animation: WarningDisplay 1.2s infinite;
+}
+
+@keyframes WarningDisplay {
+  0% {
+    opacity: 0.01;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.01;
+  }
+}

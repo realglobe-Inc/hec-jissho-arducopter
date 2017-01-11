@@ -1,0 +1,9 @@
+.app-theme-color {
+  color: $app-color;
+}
+.app-theme-dark-color {
+  color: darken($app-color, 30%);
+}
+.app-theme-background-color {
+  background-color: $app-color;
+}
