@@ -31,3 +31,13 @@ h1, h2, h3, h4, h5 {
     0% {opacity: 0}
     100% {opacity: 1}
 }
+
+.app-color {
+  color: $app-color;
+}
+.app-dark-color {
+  color: darken($app-color, 30%);
+}
+.app-background-color {
+  background-color: $app-color;
+}

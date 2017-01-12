@@ -1,10 +1,6 @@
 {
   "app-color": "#343469",
   "app-dark-color": "darken($app-color,15%)",
-  "border-color": "$app-dark-color",
   "header-height": "50px",
-  "map-piece-color": "#FF5352",
-  "map-piece-selected-color": "darken($map-piece-color,30%)",
-  "warning-color": "#E10000",
-  "map-height": "100%"
+  "map-piece-color": "#FF5352"
 }
