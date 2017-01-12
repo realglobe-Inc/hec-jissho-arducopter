@@ -1,19 +1,28 @@
 import * as Im from 'immutable'
 
+/**
+ * 地図上の緯度経度
+ */
 export interface Location {
   lat: number
   lng: number
 }
 
-export interface HLocation {
+/**
+ * コースの要素
+ */
+export interface CLocation {
   lat: number
   lng: number
   height: number
+  ordinal: number
 }
 
+/**
+ * ドローンのコース
+ */
 export interface Course {
-  id: number
-  name: string
-  body: Im.List<HLocation>
+  key: string
+  body: Im.List<CLocation>
 }
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 import GoogleMap from 'google-map-react'
 import { AppState } from './app'
 
-const mapStyle = require('../helpers/map_style.json')
+const mapStyle = require('../src/map_style.json')
 const API_KEY = process.env.RG_GOOGLE_API_KEY
 
 interface Props {
