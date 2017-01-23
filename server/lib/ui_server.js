@@ -18,7 +18,7 @@ let config = {
     }
   },
   socketIoOptions: {
-    path: '/sugos/arducompter/socket.io'
+    path: '/sugos/arducopter/socket.io'
   },
   logFile: join(__dirname, '../../var/log/ui_server.log')
 }

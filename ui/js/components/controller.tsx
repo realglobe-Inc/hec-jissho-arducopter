@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
+import COURSES from '../src/courses'
 
 interface Props {
   state: AppState
@@ -10,21 +11,33 @@ interface Props {
 class Controller extends React.Component<Props, {}> {
   render () {
     const s = this
+    let keys = COURSES.map(c => c.key)
     return (
       <div className='controller'>
         <h2>コース選択</h2>
         <div className='controller-buttons'>
-          <ApButton onTap={s.showCourse(1)}>コース1</ApButton>
-          <ApButton onTap={s.showCourse(2)}>コース2</ApButton>
-          <ApButton onTap={s.showCourse(3)}>コース3</ApButton>
+          {keys.map(key =>
+            <div className='controller-button-wrap'>
+              <ApButton wide onTap={s.showCourse(key)} key={key}>コース{key}</ApButton>
+            </div>
+          )}
         </div>
       </div>
     )
   }
 
-  showCourse (id: number) {
+  showCourse (key: string) {
+    const s = this
     return () => {
-      console.log(id)
+      let course = COURSES.find(c => c.key === key)
+      let mapCenter = {
+        lat: course.body.get(0).lat,
+        lng: course.body.get(0).lng
+      }
+      s.props.setState({
+        selectedCourseKey: key,
+        mapCenter
+      })
     }
   }
 }
