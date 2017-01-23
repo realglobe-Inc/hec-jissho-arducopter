@@ -1,6 +1,7 @@
 import * as React from 'react'
 import GoogleMap from 'google-map-react'
 import { AppState } from './app'
+import { Course } from '../interfaces/app'
 import COURSES from '../src/courses'
 
 const mapStyle = require('../src/map_style.json')
@@ -22,6 +23,9 @@ class Marker extends React.Component<any, {}> {
 }
 
 class Map extends React.Component<Props, {}> {
+  mapObj: any
+  polyObj: any
+
   render () {
     const s = this
     let { mapCenter } = s.props.state
@@ -32,6 +36,7 @@ class Map extends React.Component<Props, {}> {
                    defaultZoom={19}
                    bootstrapURLKeys={{key: API_KEY}}
                    onChange={s.changeCenter.bind(s)}
+                   onGoogleApiLoaded={({map}) => s.mapObj = map}
         >
           { s.renderMarkers() }
         </GoogleMap>
@@ -50,6 +55,7 @@ class Map extends React.Component<Props, {}> {
       return null
     }
     let course = COURSES.find(c => c.key === selectedCourseKey)
+    s.drawLines(course)
     return course.body.toArray().map(({ordinal, lat, lng, height}) => 
       <Marker key={ordinal} lat={lat} lng={lng} height={height} />
     )
@@ -63,6 +69,23 @@ class Map extends React.Component<Props, {}> {
       },
       styles: mapStyle['MAP_NOMAL_MODE']
     }
+  }
+
+  drawLines (course: Course) {
+    const s = this
+    // 以前の線を消す
+    if (s.polyObj) {
+      s.polyObj.setMap(null)
+    }
+    let points = course.body.toArray().map((({lat, lng}) => new google.maps.LatLng(lat, lng)))
+    let polyLineOptions = { 
+      path: points, 
+      strokeWeight: 2,
+      strokeColor: "#0000ff", 
+      strokeOpacity: "0.5" 
+    }
+    s.polyObj = new google.maps.Polyline(polyLineOptions)
+    s.polyObj.setMap(s.mapObj)
   }
 }
 
