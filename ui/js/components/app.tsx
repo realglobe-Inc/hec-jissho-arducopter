@@ -6,6 +6,7 @@ import Map from './map'
 import { Course, CLocation, Location } from '../interfaces/app'
 import * as Im from 'immutable'
 import COURSES from '../src/courses'
+const styles = require('../css/app.css')
 
 const MAP_CENTER = {
   lat: 33.596984,
@@ -33,7 +34,7 @@ class App extends React.Component<{}, AppState> {
       <div className='app'>
         <AppStyle/>
         <Header/>
-        <div className='app-body'>
+        <div className={ styles.main }>
           <Controller state={state} setState={s.setState.bind(s)} />
           <Map state={state} setState={s.setState.bind(s)} />
         </div>

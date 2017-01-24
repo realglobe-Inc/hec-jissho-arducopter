@@ -1,0 +1,23 @@
+.wrap {
+  composes: app-color header-height from "./share.css";
+  width: 100%;
+  margin: 0;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-bottom: 2px solid #343469;
+  box-sizing: border-box;
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 20px;
+  font-size: 25px;
+}
+
+.titleLink {
+  composes: app-color from "./share.css";
+  text-decoration: none;
+}

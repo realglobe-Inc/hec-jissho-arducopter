@@ -2,6 +2,7 @@ import * as React from 'react'
 import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
 import COURSES from '../src/courses'
+const styles = require('../css/controller.css')
 
 interface Props {
   state: AppState
@@ -13,7 +14,7 @@ class Controller extends React.Component<Props, {}> {
     const s = this
     let keys = COURSES.map(c => c.key)
     return (
-      <div className='controller'>
+      <div className={ styles.wrap }>
         <h2>コース選択</h2>
         <div className='controller-buttons'>
           {keys.map(key =>

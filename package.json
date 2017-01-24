@@ -7,7 +7,7 @@
     "dev": "./bin/dev.js",
     "compile": "webpack --config webpack.config.production.js",
     "test": "karma start",
-    "prepublish": "./ci/setup.js && npm run compile"
+    "prepare": "./ci/setup.js && npm run compile"
   },
   "repository": "realglobe-Inc/hec-jissho-arducopter",
   "author": {

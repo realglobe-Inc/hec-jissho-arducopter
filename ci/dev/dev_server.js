@@ -28,7 +28,7 @@ let devServer = new DevServer(compiler, {
   // webpack-dev-middleware options
   quiet: false,
   noInfo: true,
-  publicPath: '/arducopter/',
+  publicPath: '/arducopter/js/',
   stats: { colors: true }
 })
 

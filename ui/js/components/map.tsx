@@ -4,6 +4,7 @@ import { AppState } from './app'
 import { Course } from '../interfaces/app'
 import COURSES from '../src/courses'
 
+const styles = require('../css/map.css')
 const mapStyle = require('../src/map_style.json')
 const API_KEY = process.env.RG_GOOGLE_API_KEY
 
@@ -30,7 +31,7 @@ class Map extends React.Component<Props, {}> {
     const s = this
     let { mapCenter } = s.props.state
     return (
-      <div className='map'>
+      <div className={ styles.wrap }>
         <GoogleMap center={mapCenter}
                    options={s.createOptions.bind(s)}
                    defaultZoom={19}
