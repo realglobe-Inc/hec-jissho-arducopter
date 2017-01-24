@@ -26,3 +26,9 @@ export interface Course {
   body: Im.List<CLocation>
 }
 
+/**
+ * SUGO-Caller のインスタンス
+ */
+export interface Caller {
+  get(key: string): any
+}

@@ -38,6 +38,7 @@ class Map extends React.Component<Props, {}> {
                    bootstrapURLKeys={{key: API_KEY}}
                    onChange={s.changeCenter.bind(s)}
                    onGoogleApiLoaded={({map}) => s.mapObj = map}
+                   yesIWantToUseGoogleMapApiInternals={true}
         >
           { s.renderMarkers() }
         </GoogleMap>

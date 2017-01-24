@@ -3,7 +3,7 @@ import AppStyle from './app_style'
 import Header from './header'
 import Controller from './controller'
 import Map from './map'
-import { Course, CLocation, Location } from '../interfaces/app'
+import { Course, CLocation, Location, Caller } from '../interfaces/app'
 import * as Im from 'immutable'
 import COURSES from '../src/courses'
 const styles = require('../css/app.css')
@@ -17,6 +17,8 @@ export interface AppState {
   courses: Course[]
   selectedCourseKey?: string
   mapCenter: Location
+  connected: Boolean
+  callers: Im.Map<string, Caller>
 }
 
 class App extends React.Component<{}, AppState> {
@@ -24,7 +26,9 @@ class App extends React.Component<{}, AppState> {
     super()
     this.state = {
       courses: COURSES,
-      mapCenter: MAP_CENTER
+      mapCenter: MAP_CENTER,
+      connected: false,
+      callers: Im.Map<string, Caller>()
     }
   }
   render () {

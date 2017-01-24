@@ -23,11 +23,17 @@
   composes: center;
 }
 
+.connectButton {
+  composes: center;
+}
+
 .message {
+  color: #835050;
   font-size: 0.9em;
 }
 
-.hidden {
+.messageHide {
+  composes: message;
   opacity: 0;
 }
 
