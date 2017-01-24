@@ -9,22 +9,53 @@ interface Props {
   setState: any
 }
 
+const C_KEYS = COURSES.map(c => c.key)
+
 class Controller extends React.Component<Props, {}> {
   render () {
     const s = this
-    let keys = COURSES.map(c => c.key)
+    let { selectedCourseKey } = s.props.state
+    let isSelected = !!selectedCourseKey
     return (
       <div className={ styles.wrap }>
-        <h2>コース選択</h2>
-        <div className='controller-buttons'>
-          {keys.map(key =>
-            <div className='controller-button-wrap'>
-              <ApButton wide onTap={s.showCourse(key)} key={key}>コース{key}</ApButton>
+        <div className={ styles.startButton }>
+          <div className={ isSelected ? styles.hidden : styles.message }>
+            コースを選択してください
+          </div>
+          <ApButton
+            wide
+            disabled={ !isSelected }
+            onTap={ s.startFly.bind(s) }
+            >
+            飛行開始
+          </ApButton>
+
+        </div>
+
+        <h2 className={ styles.title } >コース選択</h2>
+        <div className={ styles.courseButtons }>
+          {C_KEYS.map(key =>
+            <div>
+              <ApButton
+                primary={selectedCourseKey === key}
+                wide
+                onTap={s.showCourse(key)}
+                key={key}
+                >
+                コース{key}
+              </ApButton>
             </div>
           )}
         </div>
       </div>
     )
+  }
+
+  startFly () {
+    if (!window.confirm('飛行開始しますか？')) {
+      return
+    }
+    console.log('FLY')
   }
 
   showCourse (key: string) {

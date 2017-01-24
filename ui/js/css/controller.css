@@ -1,5 +1,33 @@
+.center {
+  width: 100%;
+  text-align: center;
+}
+
 .wrap {
   width: 100%;
   height: 100%;
   flex: 1;
+  border-right: 1px solid #343469;
+  padding: 8px;
 }
+
+.title {
+  composes: center;
+}
+
+.courseButtons {
+  composes: center;
+}
+
+.startButton {
+  composes: center;
+}
+
+.message {
+  font-size: 0.9em;
+}
+
+.hidden {
+  opacity: 0;
+}
+

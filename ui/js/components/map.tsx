@@ -13,11 +13,11 @@ interface Props {
   setState: any
 }
 
-class Marker extends React.Component<any, {}> {
+class Pin extends React.Component<any, {}> {
   render () {
     return (
-      <div>
-        ●
+      <div className={ styles.pin }>
+        <i className={ 'fa fa-2x fa-map-pin' } aria-hidden/>
       </div>
     )
   }
@@ -58,7 +58,7 @@ class Map extends React.Component<Props, {}> {
     let course = COURSES.find(c => c.key === selectedCourseKey)
     s.drawLines(course)
     return course.body.toArray().map(({ordinal, lat, lng, height}) => 
-      <Marker key={ordinal} lat={lat} lng={lng} height={height} />
+      <Pin key={ordinal} lat={lat} lng={lng} height={height} />
     )
   }
 
@@ -82,7 +82,7 @@ class Map extends React.Component<Props, {}> {
     let polyLineOptions = { 
       path: points, 
       strokeWeight: 2,
-      strokeColor: "#0000ff", 
+      strokeColor: "#eb4ca2", 
       strokeOpacity: "0.5" 
     }
     s.polyObj = new google.maps.Polyline(polyLineOptions)

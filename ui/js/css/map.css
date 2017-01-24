@@ -3,3 +3,10 @@
   height: 100%;
   flex: 5;
 }
+
+.pin {
+  position: absolute;
+  top: -22px;
+  left: -4px;
+  color: deeppink;
+}
