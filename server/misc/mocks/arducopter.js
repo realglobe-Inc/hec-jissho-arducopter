@@ -26,9 +26,16 @@ class ArducopterModule extends Module {
     return mirror('takeoff', args)
   }
 
-  connect (...args) {
+  connect () {
     debug('connect')
-    return mirror('connect', args)
+    this.emit('connected', 1)
+    return mirror('connect', 1)
+  }
+
+  disconnect() {
+    debug('disconnect')
+    this.emit('disconnected', 1)
+    return mirror('disconnect', 1)
   }
 
   disableEvents (...args) {
@@ -57,6 +64,20 @@ class ArducopterModule extends Module {
     return mirror('startMission', args)
   }
 
+  getPosition () {
+    debug('getPosition')
+    return [33.596624, 130.214451, 0]
+  }
+
+  getBattery() {
+    debug('getBattery')
+    return {
+      remain: '100%',
+      voltage: '10V',
+      current: '5A',
+    }
+  }
+
   get $spec () {
     return {
       name: 'ArducopterModule',
@@ -66,14 +87,19 @@ class ArducopterModule extends Module {
         arm: {},
         takeoff: {},
         connect: {},
+        disconnect: {},
         disableEvents: {},
         enableEvents: {},
         setMode: {},
         saveMission: {},
         startMission: {},
+        getPosition: {},
+        getBattery: {},
       },
 
       events: {
+        connected: {},
+        disconnected: {},
         mode: {},
         armed: {},
         disarmed: {},

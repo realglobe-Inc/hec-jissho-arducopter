@@ -6,6 +6,8 @@ import { Caller, Course, CLocation } from '../interfaces/app'
 
 const debug = require('debug')('hec:app_util')
 
+const WAIT_CONNECT = 2000
+
 /**
  * 指定した Actor Key の Caller 接続する
  */
@@ -66,7 +68,7 @@ export const startAutoFlight = (course: Course, caller: Caller, type: string, ad
     .then(() => {
       // Wait for a while
       return new Promise((resolve) => {
-        setTimeout(resolve, 5000)
+        setTimeout(resolve, WAIT_CONNECT)
       })
     })
     .then(() => {
@@ -105,4 +107,53 @@ export const createMission = (course: Course, takeoffAlt: number, maxAlt: number
   }))
   let mission = [].concat(takeoff, main)
   return mission
+}
+
+export const watchDroneState = (caller: Caller, callback, type: string, addr: string) => {
+  // Events
+  const BATTERY = 'battery'
+  const POSITION = 'position'
+  const CONNECTED = 'connected'
+  const DISCONNECTED = 'disconnected'
+
+  const name = 'arducopter'
+  let arducopter = caller.get(name)
+  if (!arducopter) {
+    throw new Error(`Module not found '${name}'`)
+  }
+
+  arducopter.on(BATTERY, (battery) => callback({ battery }))
+  arducopter.on(POSITION, (coordinate) => callback({ coordinate }))
+  arducopter.on(CONNECTED, () => callback({ connected: true }))
+  arducopter.on(DISCONNECTED, () => callback({ connected: false }))
+
+  return arducopter
+    .connect(type, addr)
+    .then(() => {
+      callback({ connected: true })
+      // Wait for a while
+      return new Promise((resolve) => {
+        setTimeout(resolve, WAIT_CONNECT)
+      })
+    })
+    .then(() => {
+      return arducopter.getBattery()
+    })
+    .then((battery) => {
+      callback({ battery })
+    })
+    .then(() => {
+      return arducopter.getPosition()
+    })
+    .then((coordinate) => {
+      callback({ coordinate })
+    })
+    .then(() => {
+      return arducopter.enableEvents([
+        BATTERY,
+        POSITION,
+        CONNECTED,
+        DISCONNECTED,
+      ])
+    })
 }

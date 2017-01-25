@@ -24,6 +24,13 @@ export interface AppState {
   droneKey: string
   spinningConnection: Boolean
   spinningStartMission: Boolean
+  statusBattery: {
+    remain: string
+    voltage: string
+    current: string
+  }
+  statusPosition: Location
+  statusConnected: Boolean
 }
 
 class App extends React.Component<{}, AppState> {
@@ -39,6 +46,16 @@ class App extends React.Component<{}, AppState> {
       droneKey: 'arducopter:1',
       spinningConnection: false,
       spinningStartMission: false,
+      statusBattery: {
+        remain: '-',
+        voltage: '-',
+        current: '-',
+      },
+      statusPosition: {
+        lat: 0,
+        lng: 0,
+      },
+      statusConnected: false
     }
   }
   render () {

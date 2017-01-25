@@ -5,7 +5,7 @@ import { ApFieldSet, ApField, ApFieldLabel, ApFieldValue } from 'apeman-react-fi
 import { ApText } from 'apeman-react-text'
 import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
-import { connectCaller, startAutoFlight } from '../helpers/app_util'
+import { connectCaller, startAutoFlight, watchDroneState } from '../helpers/app_util'
 import { Caller, Course } from '../interfaces/app'
 import COURSES from '../src/courses'
 const styles = require('../css/controller.css')
@@ -59,6 +59,9 @@ class Controller extends React.Component<Props, {}> {
       droneKey,
       spinningConnection,
       spinningStartMission,
+      statusBattery,
+      statusPosition,
+      statusConnected,
     } = s.props.state
     let isSelected = !!selectedCourseKey
     return (
@@ -92,6 +95,49 @@ class Controller extends React.Component<Props, {}> {
               { connected ? '接続済み' : '接続' }
             </ApButton>
           </ApForm>
+        </div>
+
+        <h3 className={ styles.title }>ドローンの状態</h3>
+        <div className=''>
+            <ApField>
+              <ApFieldLabel>
+                状態
+              </ApFieldLabel>
+              <ApFieldValue>
+                { statusConnected ? '接続' : '切断' }
+              </ApFieldValue>
+            </ApField>
+          <ApField>
+            <ApFieldLabel>
+              残量
+            </ApFieldLabel>
+            <ApFieldValue>
+              { statusBattery.remain }
+            </ApFieldValue>
+          </ApField>
+          <ApField>
+            <ApFieldLabel>
+              電圧
+            </ApFieldLabel>
+            <ApFieldValue>
+              { statusBattery.voltage }
+            </ApFieldValue>
+          </ApField>
+          <ApField>
+            <ApFieldLabel>
+              電流
+            </ApFieldLabel>
+            <ApFieldValue>
+              { statusBattery.current }
+            </ApFieldValue>
+          </ApField>
+          <div className={styles.center}>
+            <ApButton
+              disabled={ statusPosition.lat === 0 || statusPosition.lng === 0 }
+              wide
+              onTap={ s.moveMapToDrone.bind(s) }
+              >初期位置表示</ApButton>
+          </div>
         </div>
 
         <h3 className={ styles.title }>コース選択</h3>
@@ -165,6 +211,8 @@ class Controller extends React.Component<Props, {}> {
     })
     connectCaller(droneKey)
       .then((caller: Caller) => {
+        let { droneType, droneAddr } = s.props.state
+        watchDroneState(caller, s.updateDroneInfo.bind(s), droneType, droneAddr)
         s.props.setState({
           connected: true,
           spinningConnection: false,
@@ -179,6 +227,40 @@ class Controller extends React.Component<Props, {}> {
           spinningConnection: false,
         })
       })
+  }
+
+  updateDroneInfo (data) {
+    const s = this
+    let {
+      battery,
+      coordinate,
+      connected,
+    } = data
+    if (battery) {
+      s.props.setState({
+        statusBattery: battery
+      })
+    }
+    if (coordinate) {
+      s.props.setState({
+        statusPosition: {
+          lat: Number(coordinate[0]),
+          lng: Number(coordinate[1]),
+        }
+      })
+    }
+    if (connected) {
+      s.props.setState({
+        statusConnected: connected
+      })
+    }
+  }
+
+  moveMapToDrone() {
+    const s = this
+    s.props.setState({
+      mapCenter: s.props.state.statusPosition
+    })
   }
 
   showCourse (key: string) {

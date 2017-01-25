@@ -6,7 +6,6 @@
 .wrap {
   width: 100%;
   min-width: 8em;
-  height: 100%;
   flex: 1;
   border-right: 1px solid #343469;
   padding: 8px;
@@ -15,7 +14,12 @@
 }
 
 .title {
+  font-size: 1.5em;
   composes: center;
+}
+
+.subTitle {
+  font-size: 1em;
 }
 
 .courseButtons {
