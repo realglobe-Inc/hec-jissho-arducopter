@@ -22,6 +22,8 @@ export interface AppState {
   droneType: string
   droneAddr: string
   droneKey: string
+  spinningConnection: Boolean
+  spinningStartMission: Boolean
 }
 
 class App extends React.Component<{}, AppState> {
@@ -35,6 +37,8 @@ class App extends React.Component<{}, AppState> {
       droneType: 'usb',
       droneAddr: '57600',
       droneKey: 'arducopter:1',
+      spinningConnection: false,
+      spinningStartMission: false,
     }
   }
   render () {

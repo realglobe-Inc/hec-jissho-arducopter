@@ -43,3 +43,12 @@
 .text {
   min-width: 6em;
 }
+
+.plenText {
+  composes: text;
+  text-align: left;
+  margin: 2px 0;
+  width: 100%;
+  padding: 4px 8px;
+  max-width: 480px;
+}
