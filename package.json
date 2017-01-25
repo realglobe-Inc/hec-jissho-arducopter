@@ -22,6 +22,8 @@
     "@types/react-redux": "^4.4.35",
     "@types/redux": "^3.6.31",
     "apeman-react-button": "^4.0.8",
+    "apeman-react-field": "^2.0.22",
+    "apeman-react-text": "^4.0.8",
     "apemanenv": "^3.0.5",
     "babel-polyfill": "^6.16.0",
     "browser-request": "^0.3.3",

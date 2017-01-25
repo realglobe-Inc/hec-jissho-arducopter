@@ -78,6 +78,8 @@ class ArducopterModule extends Module {
         armed: {},
         disarmed: {},
         position: {},
+        missionSaved: {},
+        commandReached: {},
       },
     }
   }

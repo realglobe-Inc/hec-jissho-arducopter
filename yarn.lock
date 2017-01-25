@@ -75,7 +75,7 @@ accepts@1.3.3, accepts@^1.2.2, accepts@~1.3.3:
     mime-types "~2.1.11"
     negotiator "0.6.1"
 
-acolor@^1.1.0:
+acolor@^1.0.0, acolor@^1.1.0:
   version "1.1.0"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/acolor/-/acolor-1.1.0.tgz#88b8ee58c94875ef7eb5b5af820a2e864aa7c78f"
   dependencies:
@@ -260,6 +260,27 @@ apeman-react-button@^4.0.8:
     asobj "^1.1.0"
     classnames "^2.2.5"
 
+apeman-react-field@^2.0.22:
+  version "2.0.22"
+  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-field/-/apeman-react-field-2.0.22.tgz#209a41f29767900086ca47e0eea1058bfedf1084"
+  dependencies:
+    apeman-react-label "^2.0.11"
+    apeman-react-style "^4.1.7"
+    asobj "^1.1.0"
+    classnames "^2.2.5"
+
+apeman-react-form@^7.0.9:
+  version "7.0.9"
+  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-form/-/apeman-react-form-7.0.9.tgz#48fe94b94e7c5651069f3fb564cf258c9645ab29"
+  dependencies:
+    acolor "^1.0.0"
+    apeman-react-icon "^4.0.8"
+    apeman-react-spinner "^3.0.25"
+    apeman-react-style "^4.1.6"
+    asobj "^1.1.0"
+    classnames "^2.2.5"
+    uuid "^2.0.2"
+
 apeman-react-icon@^4.0.8:
   version "4.0.9"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-icon/-/apeman-react-icon-4.0.9.tgz#dc2282111aca4bd2c77e9bd6c30e31991ff311ef"
@@ -273,7 +294,26 @@ apeman-react-icon@^4.0.8:
     filecopy "^2.0.2"
     filelink "^3.0.6"
 
-apeman-react-spinner@^3.0.24:
+apeman-react-label@^2.0.11:
+  version "2.0.11"
+  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-label/-/apeman-react-label-2.0.11.tgz#40474204800001794789f9ede8cc614f8bcffd02"
+  dependencies:
+    apeman-react-mixin-pure "^1.0.5"
+    apeman-react-style "^4.1.5"
+    apeman-react-touchable "^5.1.4"
+    asobj "^1.0.0"
+    classnames "^2.2.5"
+    co "^4.6.0"
+
+apeman-react-mixin-pure@^1.0.5:
+  version "1.0.5"
+  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-mixin-pure/-/apeman-react-mixin-pure-1.0.5.tgz#4358eed6707a8aa6ead71519fa4f624724b43d63"
+  dependencies:
+    co "^4.6.0"
+    deep-equal "^1.0.1"
+    fbjs "^0.8.3"
+
+apeman-react-spinner@^3.0.24, apeman-react-spinner@^3.0.25:
   version "3.0.25"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-spinner/-/apeman-react-spinner-3.0.25.tgz#9712b0f35940d6ae112dcd85d00c8d6779266481"
   dependencies:
@@ -283,12 +323,20 @@ apeman-react-spinner@^3.0.24:
     breact "^1.1.5"
     classnames "^2.2.5"
 
-apeman-react-style@^4.1.5, apeman-react-style@^4.1.6:
+apeman-react-style@^4.1.5, apeman-react-style@^4.1.6, apeman-react-style@^4.1.7:
   version "4.1.7"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-style/-/apeman-react-style-4.1.7.tgz#cd53f7952e09949b1b939bba0819ab109b0241db"
   dependencies:
     classnames "^2.2.5"
     iftype "^3.0.0"
+
+apeman-react-text@^4.0.8:
+  version "4.0.8"
+  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/apeman-react-text/-/apeman-react-text-4.0.8.tgz#b573c430a2a11ec1f36ffe003d831c8c83b5d04c"
+  dependencies:
+    acolor "^1.0.0"
+    apeman-react-style "^4.1.6"
+    classnames "^2.2.5"
 
 apeman-react-touchable@^5.1.4:
   version "5.2.1"
@@ -460,7 +508,7 @@ asn1@~0.2.3:
   version "0.2.3"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/asn1/-/asn1-0.2.3.tgz#dac8787713c9966849fc8180777ebe9c1ddf3b86"
 
-asobj@^1.1.0, asobj@^1.3.0:
+asobj@^1.0.0, asobj@^1.1.0, asobj@^1.3.0:
   version "1.4.0"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/asobj/-/asobj-1.4.0.tgz#2f01a886ea58f8ce4398edd07211334bbe1cfde1"
   dependencies:
@@ -2740,7 +2788,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.0.3, hoist-non-react-statics@^1.2.0:
+hoist-non-react-statics@^1.0.3:
   version "1.2.0"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -3533,7 +3581,7 @@ lodash@^3.10.1, lodash@^3.8.0:
   version "3.10.1"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.0.0, lodash@^4.14.0, lodash@^4.16.2, lodash@^4.16.6, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.5.0, lodash@~4.16.4:
+lodash@^4.0.0, lodash@^4.14.0, lodash@^4.16.2, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.5.0, lodash@~4.16.4:
   version "4.16.6"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/lodash/-/lodash-4.16.6.tgz#d22c9ac660288f3843e16ba7d2b5d06cca27d777"
 
@@ -3954,10 +4002,6 @@ object-assign@^3.0.0:
 object-component@0.0.3:
   version "0.0.3"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/object-component/-/object-component-0.0.3.tgz#f0c69aa50efc95b866c186f400a33769cb2f1291"
-
-object-unfreeze@^1.1.0:
-  version "1.1.0"
-  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/object-unfreeze/-/object-unfreeze-1.1.0.tgz#69628bea1f3c9d29f4eb0ba63b38002d70ea3ce9"
 
 object.omit@^2.0.0:
   version "2.0.1"
@@ -4579,14 +4623,6 @@ rc@~1.1.6:
 react-autobind@^1.0.6:
   version "1.0.6"
   resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/react-autobind/-/react-autobind-1.0.6.tgz#936bb58edf6b89b619c50f82f0e617159fdfd4f1"
-
-react-css-modules@^4.1.0:
-  version "4.1.0"
-  resolved "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-virtual/react-css-modules/-/react-css-modules-4.1.0.tgz#848e3d5089ec6596feabf6c0daaacc06866c58e7"
-  dependencies:
-    hoist-non-react-statics "^1.2.0"
-    lodash "^4.16.6"
-    object-unfreeze "^1.1.0"
 
 react-dom@^15.4.1:
   version "15.4.1"

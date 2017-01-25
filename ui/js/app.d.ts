@@ -3,6 +3,9 @@ declare var process;
 declare var google;
 
 declare module 'apeman-react-button'
+declare module 'apeman-react-form'
+declare module 'apeman-react-text'
+declare module 'apeman-react-field'
 declare module 'classnames'
 declare module 'browser-request'
 declare module 'sugo-caller'

@@ -19,6 +19,9 @@ export interface AppState {
   mapCenter: Location
   connected: Boolean
   callers: Im.Map<string, Caller>
+  droneType: string
+  droneAddr: string
+  droneKey: string
 }
 
 class App extends React.Component<{}, AppState> {
@@ -28,7 +31,10 @@ class App extends React.Component<{}, AppState> {
       courses: COURSES,
       mapCenter: MAP_CENTER,
       connected: false,
-      callers: Im.Map<string, Caller>()
+      callers: Im.Map<string, Caller>(),
+      droneType: 'usb',
+      droneAddr: '57600',
+      droneKey: 'arducopter:1',
     }
   }
   render () {
