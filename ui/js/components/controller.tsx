@@ -152,7 +152,8 @@ class Controller extends React.Component<Props, {}> {
         window.alert('自動飛行コマンドを送信しました。')
       })
       .catch((e) => {
-        throw e
+        window.alert('コマンド送信に失敗しました。')
+        console.error(e)
       })
   }
 
@@ -168,6 +169,14 @@ class Controller extends React.Component<Props, {}> {
           connected: true,
           spinningConnection: false,
           callers: s.props.state.callers.set(droneKey, caller)
+        })
+      })
+      .catch(e => {
+        window.alert('Actorとの接続に失敗しました。')
+        console.error(e)
+        s.props.setState({
+          connected: false,
+          spinningConnection: false,
         })
       })
   }
