@@ -1,13 +1,9 @@
 const { readdirSync } = require('fs')
 const { join } = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const autoprefixer = require('autoprefixer')
-const jsonImporter = require('node-sass-json-importer')
 const { port } = require('./server/env')
 
 const JS_ENTRY_PATH = 'ui/js/entries'
-const CSS_ENTRY_PATH = 'ui/scss'
 const PUBLIC_PATH = join(__dirname, 'server/public')
 
 let entries = readdirSync(join(__dirname, JS_ENTRY_PATH))
@@ -52,8 +48,8 @@ module.exports = {
       {
         test: /\.css$/,
         loaders: [
-          'style?sourceMap',
-          'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
+          'style-loader?sourceMap',
+          'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
         ]
       }
     ],
