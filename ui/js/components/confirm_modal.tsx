@@ -17,7 +17,7 @@ interface Props {
 }
 
 export default class ConfirmModal extends React.Component<Props, {}> {
-  render () {
+  render() {
     const s = this
     let {
       message,
@@ -43,7 +43,7 @@ export default class ConfirmModal extends React.Component<Props, {}> {
     )
   }
 
-  componentDidUpdate (prevProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     const s = this
     if (!s.props.enterYes) {
       return
@@ -53,14 +53,14 @@ export default class ConfirmModal extends React.Component<Props, {}> {
     }
   }
 
-  detectEnter (e) {
+  detectEnter(e) {
     const ENTER = 13
     if (e.keyCode === ENTER) {
       this.yes()
     }
   }
 
-  yes () {
+  yes() {
     const s = this
     document.removeEventListener('keydown', s.detectEnter)
     s.props.onYes()

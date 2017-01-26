@@ -37,7 +37,7 @@ export interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       courses: COURSES,
@@ -63,16 +63,17 @@ class App extends React.Component<{}, AppState> {
       modalFly: false,
     }
   }
-  render () {
+
+  render() {
     const s = this
     let { state } = s
     return (
       <div className='app'>
-        <AppStyle/>
-        <Header/>
+        <AppStyle />
+        <Header />
         <div className={ styles.main }>
-          <Controller state={state} setState={s.setState.bind(s)} />
-          <Map state={state} setState={s.setState.bind(s)} />
+          <Controller state={ state } setState={ s.setState.bind(s) } />
+          <Map state={ state } setState={ s.setState.bind(s) } />
         </div>
       </div>
     )

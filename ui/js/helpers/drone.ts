@@ -26,7 +26,7 @@ const DRONE_MODULE = 'arducopter'
 const emptyCheck = (obj) => {
   for (let key of Object.keys(obj)) {
     if (!obj[key]) {
-      throw new Error(`${key} is empty.`)
+      throw new Error(`${ key } is empty.`)
     }
   }
 }
@@ -54,10 +54,9 @@ export const startAutoFlight = (caller: Caller, type: string, addr: string) => {
     const {
       GUIDED
     } = DroneMode
-
     let arducopter = caller.get(DRONE_MODULE)
     if (!arducopter) {
-      reject(Error(`Module not found '${DRONE_MODULE}'`))
+      reject(Error(`Module not found '${ DRONE_MODULE }'`))
     }
 
     // 2
@@ -108,7 +107,7 @@ export const saveMission = (course: Course, caller: Caller, type: string, addr: 
 
     let arducopter = caller.get(DRONE_MODULE)
     if (!arducopter) {
-      reject(new Error(`Module not found '${DRONE_MODULE}'`))
+      reject(new Error(`Module not found '${ DRONE_MODULE }'`))
       return
     }
 
@@ -191,7 +190,7 @@ export const watchDroneState = (caller: Caller, callback, type: string, addr: st
 
   let arducopter = caller.get(DRONE_MODULE)
   if (!arducopter) {
-    throw new Error(`Module not found '${DRONE_MODULE}'`)
+    throw new Error(`Module not found '${ DRONE_MODULE }'`)
   }
 
   arducopter.on(BATTERY, (battery) => callback({ battery }))

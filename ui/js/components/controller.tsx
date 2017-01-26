@@ -25,16 +25,16 @@ class TextFormField extends React.Component<TextFormFieldProps, {}> {
     let {label, value, onChange, completed} = this.props
     return (
       <ApField>
-        <ApFieldLabel style={{ minWidth: '3em' }}>
+        <ApFieldLabel style={ { minWidth: '3em' } }>
           { label }
         </ApFieldLabel>
         <ApFieldValue>
-          {completed
+          { completed
             ? <div className={ styles.plenText }>{ value }</div>
             : <ApText className={ styles.text }
-                value={ value }
-                onChange={onChange}
-                rows={1}
+              value={ value }
+              onChange={ onChange }
+              rows={ 1 }
               />
           }
         </ApFieldValue>
@@ -49,7 +49,7 @@ interface Props {
 }
 
 class Controller extends React.Component<Props, {}> {
-  render () {
+  render() {
     const s = this
     let {
       selectedCourseKey,
@@ -70,30 +70,30 @@ class Controller extends React.Component<Props, {}> {
     return (
       <div className={ styles.wrap }>
         <h3 className={ styles.title }>Android 接続</h3>
-        <div className={styles.connectForm}>
+        <div className={ styles.connectForm }>
           <ApForm id='connect-drone-form' spinning={ spinningConnection }>
             <TextFormField
               label='KEY'
-              value={droneKey}
-              onChange={s.setDroneKey.bind(s)}
+              value={ droneKey }
+              onChange={ s.setDroneKey.bind(s) }
               completed={ connected }
               />
             <TextFormField
               label='TYPE'
-              value={droneType}
-              onChange={s.setDroneType.bind(s)}
+              value={ droneType }
+              onChange={ s.setDroneType.bind(s) }
               completed={ connected }
               />
             <TextFormField
               label='ADDR'
-              value={droneAddr}
-              onChange={s.setDroneAddr.bind(s)}
+              value={ droneAddr }
+              onChange={ s.setDroneAddr.bind(s) }
               completed={ connected }
               />
             <ApButton
               wide
-              disabled={connected}
-              onTap={s.connectAndroid.bind(s)}
+              disabled={ connected }
+              onTap={ s.connectAndroid.bind(s) }
               >
               { connected ? '接続済み' : '接続' }
             </ApButton>
@@ -134,7 +134,7 @@ class Controller extends React.Component<Props, {}> {
               { statusBattery.current }
             </ApFieldValue>
           </ApField>
-          <div className={styles.center}>
+          <div className={ styles.center }>
             <ApButton
               disabled={ statusPosition.lat === 0 || statusPosition.lng === 0 }
               wide
@@ -145,26 +145,26 @@ class Controller extends React.Component<Props, {}> {
 
         <h3 className={ styles.title }>コース選択</h3>
         <div className={ styles.courseButtons }>
-          {C_KEYS.map(key =>
-            <div key={key}>
+          { C_KEYS.map(key =>
+            <div key={ key }>
               <ApButton
-                primary={selectedCourseKey === key}
+                primary={ selectedCourseKey === key }
                 wide
-                onTap={s.showCourse(key)}
+                onTap={ s.showCourse(key) }
                 >
-                コース{key}
+                コース{ key }
               </ApButton>
             </div>
-          )}
+          ) }
           <div>
             <ApButton
               wide
-              spinning={spinningSaveMission}
-              disabled={!connected || !selectedCourseKey || !!savedCourseKey}
-              onTap={s.saveCourse.bind(s)}
-              style={{ borderWidth: '2px', lineHeight: '1.8em' }}
+              spinning={ spinningSaveMission }
+              disabled={ !connected || !selectedCourseKey || !!savedCourseKey }
+              onTap={ s.saveCourse.bind(s) }
+              style={ { borderWidth: '2px', lineHeight: '1.8em' } }
               >
-              {!!savedCourseKey ? 'コース保存済み' : 'コース決定'}
+              { !!savedCourseKey ? 'コース保存済み' : 'コース決定' }
             </ApButton>
           </div>
         </div>
@@ -180,9 +180,9 @@ class Controller extends React.Component<Props, {}> {
           <ApButton
             wide
             disabled={ !savedCourseKey || !connected }
-            onTap={() => { s.props.setState({ modalFly: true }) }}
-            spinning={spinningStartMission}
-            style={{ borderWidth: '2px', lineHeight: '2em' }}
+            onTap={ () => { s.props.setState({ modalFly: true }) } }
+            spinning={ spinningStartMission }
+            style={ { borderWidth: '2px', lineHeight: '2em' } }
             >
             飛行開始
           </ApButton>
@@ -191,16 +191,16 @@ class Controller extends React.Component<Props, {}> {
           message='飛行開始しますか？'
           yes='はい'
           no='いいえ'
-          onYes={s.startFly.bind(s)}
-          onNo={() => { s.props.setState({ modalFly: false }) }}
-          visible={modalFly}
-          enterYes={true}
-        />
+          onYes={ s.startFly.bind(s) }
+          onNo={ () => { s.props.setState({ modalFly: false }) } }
+          visible={ modalFly }
+          enterYes={ true }
+          />
       </div>
     )
   }
 
-  saveCourse () {
+  saveCourse() {
     const s = this
     s.props.setState({
       spinningSaveMission: true
@@ -221,7 +221,7 @@ class Controller extends React.Component<Props, {}> {
       })
   }
 
-  startFly () {
+  startFly() {
     const s = this
     s.props.setState({
       spinningStartMission: true,
@@ -241,7 +241,7 @@ class Controller extends React.Component<Props, {}> {
       })
   }
 
-  connectAndroid () {
+  connectAndroid() {
     const s = this
     let { droneKey } = s.props.state
     s.props.setState({
@@ -267,7 +267,7 @@ class Controller extends React.Component<Props, {}> {
       })
   }
 
-  updateDroneInfo (data) {
+  updateDroneInfo(data) {
     const s = this
     let {
       battery,
@@ -301,7 +301,7 @@ class Controller extends React.Component<Props, {}> {
     })
   }
 
-  showCourse (key: string) {
+  showCourse(key: string) {
     const s = this
     return () => {
       let course = COURSES.find(c => c.key === key)
@@ -316,15 +316,15 @@ class Controller extends React.Component<Props, {}> {
     }
   }
 
-  setDroneKey (e) {
+  setDroneKey(e) {
     this.props.setState({ droneKey: e.target.value })
   }
 
-  setDroneType (e) {
+  setDroneType(e) {
     this.props.setState({ droneType: e.target.value })
   }
 
-  setDroneAddr (e) {
+  setDroneAddr(e) {
     this.props.setState({ droneAddr: e.target.value })
   }
 }

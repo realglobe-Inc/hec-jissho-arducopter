@@ -11,14 +11,14 @@ import { ApSpinnerStyle } from 'apeman-react-spinner'
 const COLOR = '#343469'
 
 class AppStyle extends React.Component<{}, {}> {
-  render () {
+  render() {
     return (
       <div className='app_style'>
-        <ApButtonStyle highlightColor={COLOR} />
-        <ApTextStyle highlightColor={COLOR} />
-        <ApFieldStyle highlightColor={COLOR} />
-        <ApFormStyle highlightColor={COLOR} />
-        <ApSpinnerStyle highlightColor={COLOR} />
+        <ApButtonStyle highlightColor={ COLOR } />
+        <ApTextStyle highlightColor={ COLOR } />
+        <ApFieldStyle highlightColor={ COLOR } />
+        <ApFormStyle highlightColor={ COLOR } />
+        <ApSpinnerStyle highlightColor={ COLOR } />
       </div>
     )
   }

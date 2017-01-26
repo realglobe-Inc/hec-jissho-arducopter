@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return
   }
   ReactDOM.render(
-    <App/>,
+    <App />,
     rootElement
   )
 })
