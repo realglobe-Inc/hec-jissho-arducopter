@@ -8,6 +8,29 @@ const debug = require('debug')('hec:app_util')
 
 const WAIT_CONNECT = 2000
 
+const DroneEvents = {
+  MODE: 'mode',
+  MISSION_SAVED: 'missionSaved',
+  DISARMED: 'disarmed',
+  COMMAND_REACHED: 'commandReached',
+  BATTERY: 'battery',
+  POSITION: 'position',
+  CONNECTED: 'connected',
+  DISCONNECTED: 'disconnected',
+}
+const DroneMode = {
+  GUIDED: 'GUIDED',
+}
+const DRONE_MODULE = 'arducopter'
+
+const emptyCheck = (obj) => {
+  for (let key of Object.keys(obj)) {
+    if (!obj[key]) {
+      throw new Error(`${key} is empty.`)
+    }
+  }
+}
+
 /**
  * 指定した Actor Key の Caller 接続する
  */
@@ -20,77 +43,120 @@ export const connectCaller = (key: string) => {
 }
 
 /**
- * ミッションを登録して飛行開始
+ * 飛行開始(Missonは設定済み)
  */
-export const startAutoFlight = (course: Course, caller: Caller, type: string, addr: string) => {
-  // Events
-  const MODE = 'mode'
-  const MISSION_SAVED = 'missionSaved'
-  const DISARMED = 'disarmed'
-  const COMMAND_REACHED = 'commandReached'
-  // Config
-  const takeoffAlt = 10
-  const maxAlt = 50
-  // Mode
-  const GUIDED = 'GUIDED'
+export const startAutoFlight = (caller: Caller, type: string, addr: string) => {
+  return new Promise((resolve, reject) => {
+    emptyCheck({ caller, type, addr })
+    const {
+      MODE,
+    } = DroneEvents
+    const {
+      GUIDED
+    } = DroneMode
 
-  const name = 'arducopter'
-  let arducopter = caller.get(name)
-  if (!arducopter) {
-    throw new Error(`Module not found '${name}'`)
-  }
-
-  // 2
-  arducopter.on(MODE, data => {
-    if (data.mode.toUpperCase() === GUIDED) {
-      debug(MODE)
-      const mission = createMission(course, takeoffAlt, maxAlt)
-      arducopter.saveMission(mission)
+    let arducopter = caller.get(DRONE_MODULE)
+    if (!arducopter) {
+      reject(Error(`Module not found '${DRONE_MODULE}'`))
     }
-  })
 
-  // 3
-  arducopter.on(MISSION_SAVED, () => {
-    debug(MISSION_SAVED)
-    arducopter.startMission(true, true)
-    arducopter.on(DISARMED, () => {
-      debug(DISARMED)
+    // 2
+    arducopter.once(MODE, ({ mode }) => {
+      if (mode.toUpperCase() === GUIDED) {
+        debug(MODE)
+        arducopter.startMission(true, true)
+          .then(resolve)
+      }
     })
-  })
 
-  arducopter.on(COMMAND_REACHED, data => {
-    debug(COMMAND_REACHED, data.index)
-  })
-
-  // 1
-  return arducopter
-    .connect(type, addr)
-    .then(() => {
-      // Wait for a while
-      return new Promise((resolve) => {
-        setTimeout(resolve, WAIT_CONNECT)
+    // 1
+    arducopter
+      .connect(type, addr)
+      .then(() => {
+        // Wait for a while
+        return new Promise((resolve) => {
+          setTimeout(resolve, WAIT_CONNECT)
+        })
       })
+      .then(() => {
+        return arducopter.enableEvents([
+          MODE,
+        ])
+      })
+      .then(() => {
+        return arducopter.setMode(GUIDED)
+      })
+  })
+}
+
+/**
+ * Drone に Mission を設定する
+ */
+export const saveMission = (course: Course, caller: Caller, type: string, addr: string) => {
+  return new Promise((resolve, reject) => {
+    emptyCheck({ course, caller, type, addr })
+    const {
+      MODE,
+      MISSION_SAVED,
+    } = DroneEvents
+    const {
+      GUIDED,
+    } = DroneMode
+    // Config
+    const takeoffAlt = 10
+    const maxAlt = 50
+
+    let arducopter = caller.get(DRONE_MODULE)
+    if (!arducopter) {
+      reject(new Error(`Module not found '${DRONE_MODULE}'`))
+      return
+    }
+
+    let timeoutId = setTimeout(() => reject(new Error('Timeout')), 10000)
+
+    // 2
+    arducopter.once(MODE, ({ mode }) => {
+      if (mode.toUpperCase() === GUIDED) {
+        debug(MODE)
+        const mission = createMission(course, takeoffAlt, maxAlt)
+        arducopter.saveMission(mission)
+      }
     })
-    .then(() => {
-      return arducopter.disableEvents(null)
+
+    // 3
+    arducopter.once(MISSION_SAVED, () => {
+      debug(MISSION_SAVED)
+      clearTimeout(timeoutId)
+      resolve()
     })
-    .then(() => {
-      return arducopter.enableEvents([
-        MODE,
-        MISSION_SAVED,
-        DISARMED,
-        COMMAND_REACHED,
-      ])
-    })
-    .then(() => {
-      return arducopter.setMode(GUIDED)
-    })
+
+    // 1
+    arducopter
+      // 接続されている状態で何回 connect しても OK?
+      .connect(type, addr)
+      .then(() => {
+        // Wait for connection
+        return new Promise((resolve) => {
+          setTimeout(resolve, WAIT_CONNECT)
+        })
+      })
+      .then(() => {
+        return arducopter.enableEvents([
+          MODE,
+          MISSION_SAVED,
+        ])
+      })
+      .then(() => {
+        return arducopter.setMode(GUIDED)
+      })
+  })
 }
 
 /**
  * Course から Mission に変換
  */
 export const createMission = (course: Course, takeoffAlt: number, maxAlt: number) => {
+  emptyCheck({ course })
   let takeoff = [
     {
       type: 'takeoff',
@@ -109,23 +175,37 @@ export const createMission = (course: Course, takeoffAlt: number, maxAlt: number
   return mission
 }
 
+/**
+ * Drone の状態を取得し、イベントを監視する
+ */
 export const watchDroneState = (caller: Caller, callback, type: string, addr: string) => {
-  // Events
-  const BATTERY = 'battery'
-  const POSITION = 'position'
-  const CONNECTED = 'connected'
-  const DISCONNECTED = 'disconnected'
+  emptyCheck({ caller, callback, type, addr })
+  const {
+    BATTERY,
+    POSITION,
+    CONNECTED,
+    DISCONNECTED,
+    COMMAND_REACHED,
+    DISARMED,
+  } = DroneEvents
 
-  const name = 'arducopter'
-  let arducopter = caller.get(name)
+  let arducopter = caller.get(DRONE_MODULE)
   if (!arducopter) {
-    throw new Error(`Module not found '${name}'`)
+    throw new Error(`Module not found '${DRONE_MODULE}'`)
   }
 
   arducopter.on(BATTERY, (battery) => callback({ battery }))
   arducopter.on(POSITION, (coordinate) => callback({ coordinate }))
   arducopter.on(CONNECTED, () => callback({ connected: true }))
   arducopter.on(DISCONNECTED, () => callback({ connected: false }))
+
+  arducopter.on(COMMAND_REACHED, ({ index }) => {
+    debug(COMMAND_REACHED, index)
+  })
+  arducopter.on(DISARMED, () => {
+    debug(DISARMED)
+  })
+
 
   return arducopter
     .connect(type, addr)
@@ -149,11 +229,16 @@ export const watchDroneState = (caller: Caller, callback, type: string, addr: st
       callback({ coordinate })
     })
     .then(() => {
+      return arducopter.disableEvents(null)
+    })
+    .then(() => {
       return arducopter.enableEvents([
         BATTERY,
         POSITION,
         CONNECTED,
         DISCONNECTED,
+        COMMAND_REACHED,
+        DISARMED,
       ])
     })
 }

@@ -69,7 +69,7 @@ class Map extends React.Component<Props, {}> {
     }
     let course = COURSES.find(c => c.key === selectedCourseKey)
     s.drawLines(course)
-    return course.body.toArray().map(({ordinal, lat, lng, height}) => 
+    return course.body.toArray().map(({ordinal, lat, lng, height}) =>
       <Pin key={ordinal} lat={lat} lng={lng} height={height} />
     )
   }
@@ -102,11 +102,11 @@ class Map extends React.Component<Props, {}> {
       s.polyObj.setMap(null)
     }
     let points = course.body.toArray().map((({lat, lng}) => new google.maps.LatLng(lat, lng)))
-    let polyLineOptions = { 
-      path: points, 
+    let polyLineOptions = {
+      path: points,
       strokeWeight: 2,
-      strokeColor: "#eb4ca2", 
-      strokeOpacity: "0.5" 
+      strokeColor: "#eb4ca2",
+      strokeOpacity: "0.5"
     }
     s.polyObj = new google.maps.Polyline(polyLineOptions)
     s.polyObj.setMap(s.mapObj)

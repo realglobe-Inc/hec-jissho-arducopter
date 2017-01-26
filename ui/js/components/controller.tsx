@@ -5,7 +5,7 @@ import { ApFieldSet, ApField, ApFieldLabel, ApFieldValue } from 'apeman-react-fi
 import { ApText } from 'apeman-react-text'
 import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
-import { connectCaller, startAutoFlight, watchDroneState } from '../helpers/app_util'
+import { connectCaller, startAutoFlight, saveMission, watchDroneState } from '../helpers/app_util'
 import { Caller, Course } from '../interfaces/app'
 import COURSES from '../src/courses'
 const styles = require('../css/controller.css')
@@ -53,11 +53,13 @@ class Controller extends React.Component<Props, {}> {
     const s = this
     let {
       selectedCourseKey,
+      savedCourseKey,
       connected,
       droneType,
       droneAddr,
       droneKey,
       spinningConnection,
+      spinningSaveMission,
       spinningStartMission,
       statusBattery,
       statusPosition,
@@ -153,22 +155,36 @@ class Controller extends React.Component<Props, {}> {
               </ApButton>
             </div>
           )}
+          <div>
+            <ApButton
+              wide
+              spinning={spinningSaveMission}
+              disabled={!connected || !selectedCourseKey || !!savedCourseKey}
+              onTap={s.saveCourse.bind(s)}
+              style={{ borderWidth: '2px', lineHeight: '1.8em' }}
+              >
+              {!!savedCourseKey ? 'コース保存済み' : 'コース決定'}
+            </ApButton>
+          </div>
         </div>
 
         <h3 className={ styles.title }>飛行</h3>
         <div className={ styles.startButton }>
           <div className={ connected ? styles.messageHide : styles.message }>
-            Android接続してください
+            UI と Android を接続してください
+          </div>
+          <div className={ statusConnected ? styles.messageHide : styles.message }>
+            Android と Drone を接続してください
           </div>
           <div className={ isSelected ? styles.messageHide : styles.message }>
             コースを選択してください
           </div>
           <ApButton
             wide
-            disabled={ !isSelected }
+            disabled={ !isSelected || !connected || !statusConnected}
             onTap={s.startFly.bind(s)}
             spinning={spinningStartMission}
-            style={{lineHeight: '2em'}}
+            style={{ borderWidth: '2px', lineHeight: '2em' }}
             >
             飛行開始
           </ApButton>
@@ -179,6 +195,27 @@ class Controller extends React.Component<Props, {}> {
     )
   }
 
+  saveCourse () {
+    const s = this
+    s.props.setState({
+      spinningSaveMission: true
+    })
+    let {callers, courses, selectedCourseKey, droneKey, droneType, droneAddr} = s.props.state
+    let caller = callers.get(droneKey)
+    let course = courses.find((course: Course) => course.key === selectedCourseKey)
+    saveMission(course, caller, droneType, droneAddr)
+      .then(() => {
+        s.props.setState({
+          savedCourseKey: selectedCourseKey,
+          spinningSaveMission: false,
+        })
+      })
+      .catch((e) => {
+        window.alert('コース保存に失敗しました')
+        console.error(e)
+      })
+  }
+
   startFly () {
     const s = this
     if (!window.confirm('飛行開始しますか？')) {
@@ -187,10 +224,9 @@ class Controller extends React.Component<Props, {}> {
     s.props.setState({
       spinningStartMission: true
     })
-    let {callers, courses, selectedCourseKey, droneKey, droneType, droneAddr} = s.props.state
+    let {callers, droneKey, droneType, droneAddr} = s.props.state
     let caller = callers.get(droneKey)
-    let course = courses.find((course: Course) => course.key === selectedCourseKey)
-    startAutoFlight(course, caller, droneType, droneAddr)
+    startAutoFlight(caller, droneType, droneAddr)
       .then(() => {
         s.props.setState({
           spinningStartMission: false

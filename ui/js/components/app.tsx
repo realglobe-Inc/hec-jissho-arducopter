@@ -16,6 +16,7 @@ const MAP_CENTER = {
 export interface AppState {
   courses: Course[]
   selectedCourseKey?: string
+  savedCourseKey?: string
   mapCenter: Location
   connected: Boolean
   callers: Im.Map<string, Caller>
@@ -23,6 +24,7 @@ export interface AppState {
   droneAddr: string
   droneKey: string
   spinningConnection: Boolean
+  spinningSaveMission: Boolean
   spinningStartMission: Boolean
   statusBattery: {
     remain: string
@@ -45,6 +47,7 @@ class App extends React.Component<{}, AppState> {
       droneAddr: '57600',
       droneKey: 'arducopter:1',
       spinningConnection: false,
+      spinningSaveMission: false,
       spinningStartMission: false,
       statusBattery: {
         remain: '-',
