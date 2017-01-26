@@ -44,13 +44,16 @@ class TextFormField extends React.Component<TextFormFieldProps, {}> {
 }
 
 interface Props {
-  state: AppState
-  setState: any
+  App: {
+    state: AppState
+    setState: any
+  }
 }
 
 class Controller extends React.Component<Props, {}> {
   render() {
     const s = this
+    const { App } = s.props
     let {
       selectedCourseKey,
       savedCourseKey,
@@ -64,8 +67,8 @@ class Controller extends React.Component<Props, {}> {
       statusBattery,
       statusPosition,
       statusConnected,
-      modalFly,
-    } = s.props.state
+      modalForFlying,
+    } = App.state
     let isSelected = !!selectedCourseKey
     return (
       <div className={ styles.wrap }>
@@ -180,7 +183,7 @@ class Controller extends React.Component<Props, {}> {
           <ApButton
             wide
             disabled={ !savedCourseKey || !connected }
-            onTap={ () => { s.props.setState({ modalFly: true }) } }
+            onTap={ () => { App.setState({ modalForFlying: true }) } }
             spinning={ spinningStartMission }
             style={ { borderWidth: '2px', lineHeight: '2em' } }
             >
@@ -192,8 +195,8 @@ class Controller extends React.Component<Props, {}> {
           yes='はい'
           no='いいえ'
           onYes={ s.startFly.bind(s) }
-          onNo={ () => { s.props.setState({ modalFly: false }) } }
-          visible={ modalFly }
+          onNo={ () => { App.setState({ modalForFlying: false }) } }
+          visible={ modalForFlying }
           enterYes={ true }
           />
       </div>
@@ -202,66 +205,77 @@ class Controller extends React.Component<Props, {}> {
 
   saveCourse() {
     const s = this
-    s.props.setState({
+    const { App } = s.props
+    App.setState({
       spinningSaveMission: true
     })
-    let {callers, courses, selectedCourseKey, droneKey, droneType, droneAddr} = s.props.state
+    let {callers, courses, selectedCourseKey, droneKey, droneType, droneAddr} = App.state
     let caller = callers.get(droneKey)
     let course = courses.find((course: Course) => course.key === selectedCourseKey)
     saveMission(course, caller, droneType, droneAddr)
       .then(() => {
-        s.props.setState({
+        App.setState({
           savedCourseKey: selectedCourseKey,
-          spinningSaveMission: false,
         })
       })
       .catch((e) => {
         window.alert('コース保存に失敗しました')
         console.error(e)
       })
+      .then(() => {
+        App.setState({
+          spinningSaveMission: false,
+        })
+      })
   }
 
   startFly() {
     const s = this
-    s.props.setState({
+    const { App } = s.props
+    App.setState({
       spinningStartMission: true,
-      modalFly: false,
+      modalForFlying: false,
     })
-    let {callers, droneKey, droneType, droneAddr} = s.props.state
+    let {callers, droneKey, droneType, droneAddr} = App.state
     let caller = callers.get(droneKey)
     startAutoFlight(caller, droneType, droneAddr)
-      .then(() => {
-        s.props.setState({
-          spinningStartMission: false
-        })
-      })
       .catch((e) => {
         window.alert('コマンド送信に失敗しました。')
         console.error(e)
+      })
+      .then(() => {
+        App.setState({
+          spinningStartMission: false
+        })
       })
   }
 
   connectAndroid() {
     const s = this
-    let { droneKey } = s.props.state
-    s.props.setState({
+    const { App } = s.props
+    let { droneKey } = App.state
+    App.setState({
       spinningConnection: true
     })
     connectCaller(droneKey)
       .then((caller: Caller) => {
-        let { droneType, droneAddr } = s.props.state
+        let { droneType, droneAddr, callers } = App.state
         watchDroneState(caller, s.updateDroneInfo.bind(s), droneType, droneAddr)
-        s.props.setState({
+        App.setState({
           connected: true,
-          spinningConnection: false,
-          callers: s.props.state.callers.set(droneKey, caller)
+          callers: callers.set(droneKey, caller)
         })
       })
       .catch(e => {
         window.alert('Actorとの接続に失敗しました。')
         console.error(e)
-        s.props.setState({
+        App.setState({
           connected: false,
+          spinningConnection: false,
+        })
+      })
+      .then(() => {
+        App.setState({
           spinningConnection: false,
         })
       })
@@ -269,18 +283,19 @@ class Controller extends React.Component<Props, {}> {
 
   updateDroneInfo(data) {
     const s = this
+    const { App } = s.props
     let {
       battery,
       coordinate,
       connected,
     } = data
     if (battery) {
-      s.props.setState({
+      App.setState({
         statusBattery: battery
       })
     }
     if (coordinate) {
-      s.props.setState({
+      App.setState({
         statusPosition: {
           lat: Number(coordinate[0]),
           lng: Number(coordinate[1]),
@@ -288,7 +303,7 @@ class Controller extends React.Component<Props, {}> {
       })
     }
     if (connected) {
-      s.props.setState({
+      App.setState({
         statusConnected: connected
       })
     }
@@ -296,20 +311,22 @@ class Controller extends React.Component<Props, {}> {
 
   moveMapToDrone() {
     const s = this
-    s.props.setState({
-      mapCenter: s.props.state.statusPosition
+    const { App } = s.props
+    App.setState({
+      mapCenter: App.state.statusPosition
     })
   }
 
   showCourse(key: string) {
     const s = this
+    const { App } = s.props
     return () => {
       let course = COURSES.find(c => c.key === key)
       let mapCenter = {
         lat: course.body.get(0).lat,
         lng: course.body.get(0).lng
       }
-      s.props.setState({
+      App.setState({
         selectedCourseKey: key,
         mapCenter
       })
@@ -317,15 +334,15 @@ class Controller extends React.Component<Props, {}> {
   }
 
   setDroneKey(e) {
-    this.props.setState({ droneKey: e.target.value })
+    this.props.App.setState({ droneKey: e.target.value })
   }
 
   setDroneType(e) {
-    this.props.setState({ droneType: e.target.value })
+    this.props.App.setState({ droneType: e.target.value })
   }
 
   setDroneAddr(e) {
-    this.props.setState({ droneAddr: e.target.value })
+    this.props.App.setState({ droneAddr: e.target.value })
   }
 }
 

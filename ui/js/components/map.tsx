@@ -8,11 +8,6 @@ const styles = require('../css/map.css')
 const mapStyle = require('../src/map_style.json')
 const API_KEY = process.env.RG_GOOGLE_API_KEY
 
-interface Props {
-  state: AppState
-  setState: any
-}
-
 class Pin extends React.Component<any, {}> {
   render() {
     return (
@@ -33,13 +28,21 @@ class Drone extends React.Component<any, {}> {
   }
 }
 
+interface Props {
+  App: {
+    state: AppState
+    setState: any
+  }
+}
+
 class Map extends React.Component<Props, {}> {
   mapObj: any
   polyObj: any
 
   render() {
     const s = this
-    let { mapCenter } = s.props.state
+    const { App } = s.props
+    let { mapCenter } = App.state
     return (
       <div className={ styles.wrap }>
         <GoogleMap center={ mapCenter }
@@ -58,12 +61,13 @@ class Map extends React.Component<Props, {}> {
   }
 
   changeCenter({ center }) {
-    this.props.setState({ mapCenter: center })
+    this.props.App.setState({ mapCenter: center })
   }
 
   renderMarkers() {
     const s = this
-    let { selectedCourseKey } = s.props.state
+    const { App } = s.props
+    let { selectedCourseKey } = App.state
     if (!selectedCourseKey) {
       return null
     }
@@ -76,7 +80,8 @@ class Map extends React.Component<Props, {}> {
 
   renderDrone() {
     const s = this
-    let {statusConnected, statusPosition} = s.props.state
+    const { App } = s.props
+    let {statusConnected, statusPosition} = App.state
     let {lat, lng} = statusPosition
     if (statusConnected && lat > 0 && lng > 0) {
       return <Drone lat={ lat } lng={ lng } />

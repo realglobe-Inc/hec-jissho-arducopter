@@ -33,7 +33,7 @@ export interface AppState {
   }
   statusPosition: Location
   statusConnected: Boolean
-  modalFly: Boolean
+  modalForFlying: Boolean
 }
 
 class App extends React.Component<{}, AppState> {
@@ -60,7 +60,7 @@ class App extends React.Component<{}, AppState> {
         lng: 0,
       },
       statusConnected: false,
-      modalFly: false,
+      modalForFlying: false,
     }
   }
 
@@ -72,8 +72,8 @@ class App extends React.Component<{}, AppState> {
         <AppStyle />
         <Header />
         <div className={ styles.main }>
-          <Controller state={ state } setState={ s.setState.bind(s) } />
-          <Map state={ state } setState={ s.setState.bind(s) } />
+          <Controller App={ s } />
+          <Map App={ s } />
         </div>
       </div>
     )
