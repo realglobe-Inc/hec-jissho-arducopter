@@ -1,5 +1,5 @@
 /**
- * Application util functions
+ * Helper functions about Drone
  */
 import * as sugoCaller from 'sugo-caller'
 import { Caller, Course, CLocation } from '../interfaces/app'

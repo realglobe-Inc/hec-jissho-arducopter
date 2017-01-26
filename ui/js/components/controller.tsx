@@ -5,7 +5,7 @@ import { ApFieldSet, ApField, ApFieldLabel, ApFieldValue } from 'apeman-react-fi
 import { ApText } from 'apeman-react-text'
 import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
-import { connectCaller, startAutoFlight, saveMission, watchDroneState } from '../helpers/app_util'
+import { connectCaller, startAutoFlight, saveMission, watchDroneState } from '../helpers/drone'
 import { Caller, Course } from '../interfaces/app'
 import COURSES from '../src/courses'
 const styles = require('../css/controller.css')
