@@ -1,4 +1,5 @@
 import * as React from 'react'
+import * as autoBind from 'react-autobind'
 import GoogleMap from 'google-map-react'
 import { AppState } from './app'
 import { Course } from '../interfaces/app'
@@ -36,6 +37,11 @@ interface Props {
 }
 
 class Map extends React.Component<Props, {}> {
+  constructor() {
+    super()
+    autoBind(this)
+  }
+
   mapObj: any
   polyObj: any
 
@@ -46,10 +52,10 @@ class Map extends React.Component<Props, {}> {
     return (
       <div className={ styles.wrap }>
         <GoogleMap center={ mapCenter }
-          options={ s.createOptions.bind(s) }
+          options={ s.createOptions }
           defaultZoom={ 19 }
           bootstrapURLKeys={ { key: API_KEY } }
-          onChange={ s.changeCenter.bind(s) }
+          onChange={ s.changeCenter }
           onGoogleApiLoaded={ ({map}) => s.mapObj = map }
           yesIWantToUseGoogleMapApiInternals={ true }
           >

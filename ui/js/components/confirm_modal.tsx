@@ -2,6 +2,7 @@
  * Modal window of confirmation
  */
 import * as React from 'react'
+import * as autoBind from 'react-autobind'
 import * as c from 'classnames'
 import { ApButton } from 'apeman-react-button'
 const styles = require('../css/confirm_modal.css')
@@ -17,6 +18,11 @@ interface Props {
 }
 
 export default class ConfirmModal extends React.Component<Props, {}> {
+  constructor() {
+    super()
+    autoBind(this)
+  }
+
   render() {
     const s = this
     let {
@@ -35,7 +41,7 @@ export default class ConfirmModal extends React.Component<Props, {}> {
             { message }
           </div>
           <div className={ styles.buttons }>
-            <ApButton onTap={ enterYes ? s.yes.bind(s) : onYes }>{ yes }</ApButton>
+            <ApButton onTap={ enterYes ? s.yes : onYes }>{ yes }</ApButton>
             <ApButton onTap={ onNo }>{ no }</ApButton>
           </div>
         </div>
@@ -49,7 +55,7 @@ export default class ConfirmModal extends React.Component<Props, {}> {
       return
     }
     if (!prevProps.visible && s.props.visible) {
-      document.addEventListener('keydown', s.detectEnter.bind(s))
+      document.addEventListener('keydown', s.detectEnter)
     }
   }
 

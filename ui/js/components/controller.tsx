@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as Im from 'immutable'
+import * as autoBind from 'react-autobind'
 import { ApForm } from 'apeman-react-form'
 import { ApFieldSet, ApField, ApFieldLabel, ApFieldValue } from 'apeman-react-field'
 import { ApText } from 'apeman-react-text'
@@ -21,6 +22,11 @@ interface TextFormFieldProps {
 }
 
 class TextFormField extends React.Component<TextFormFieldProps, {}> {
+  constructor() {
+    super()
+    autoBind(this)
+  }
+
   render() {
     let {label, value, onChange, completed} = this.props
     return (
@@ -78,25 +84,25 @@ class Controller extends React.Component<Props, {}> {
             <TextFormField
               label='KEY'
               value={ droneKey }
-              onChange={ s.setDroneKey.bind(s) }
+              onChange={ s.setDroneKey }
               completed={ connected }
               />
             <TextFormField
               label='TYPE'
               value={ droneType }
-              onChange={ s.setDroneType.bind(s) }
+              onChange={ s.setDroneType }
               completed={ connected }
               />
             <TextFormField
               label='ADDR'
               value={ droneAddr }
-              onChange={ s.setDroneAddr.bind(s) }
+              onChange={ s.setDroneAddr }
               completed={ connected }
               />
             <ApButton
               wide
               disabled={ connected }
-              onTap={ s.connectAndroid.bind(s) }
+              onTap={ s.connectAndroid }
               >
               { connected ? '接続済み' : '接続' }
             </ApButton>
@@ -141,7 +147,7 @@ class Controller extends React.Component<Props, {}> {
             <ApButton
               disabled={ statusPosition.lat === 0 || statusPosition.lng === 0 }
               wide
-              onTap={ s.moveMapToDrone.bind(s) }
+              onTap={ s.moveMapToDrone }
               >初期位置表示</ApButton>
           </div>
         </div>
@@ -164,7 +170,7 @@ class Controller extends React.Component<Props, {}> {
               wide
               spinning={ spinningSaveMission }
               disabled={ !connected || !selectedCourseKey || !!savedCourseKey }
-              onTap={ s.saveCourse.bind(s) }
+              onTap={ s.saveCourse }
               style={ { borderWidth: '2px', lineHeight: '1.8em' } }
               >
               { !!savedCourseKey ? 'コース保存済み' : 'コース決定' }
@@ -194,7 +200,7 @@ class Controller extends React.Component<Props, {}> {
           message='飛行開始しますか？'
           yes='はい'
           no='いいえ'
-          onYes={ s.startFly.bind(s) }
+          onYes={ s.startFlying }
           onNo={ () => { app.setState({ modalForFlying: false }) } }
           visible={ modalForFlying }
           enterYes={ true }
@@ -229,7 +235,7 @@ class Controller extends React.Component<Props, {}> {
       })
   }
 
-  startFly() {
+  startFlying() {
     const s = this
     const { app } = s.props
     app.setState({
@@ -260,7 +266,7 @@ class Controller extends React.Component<Props, {}> {
     connectCaller(droneKey)
       .then((caller: Caller) => {
         let { droneType, droneAddr, callers } = app.state
-        watchDroneState(caller, s.updateDroneInfo.bind(s), droneType, droneAddr)
+        watchDroneState(caller, s.updateDroneInfo, droneType, droneAddr)
         app.setState({
           connected: true,
           callers: callers.set(droneKey, caller)
