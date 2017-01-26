@@ -56,6 +56,7 @@ class ArducopterModule extends Module {
 
   saveMission (...args) {
     debug('saveMission')
+    this.emit('missionSaved', 1)
     return mirror('saveMission', args)
   }
 

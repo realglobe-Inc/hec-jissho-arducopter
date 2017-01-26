@@ -16,6 +16,7 @@ const MAP_CENTER = {
 export interface AppState {
   courses: Course[]
   selectedCourseKey?: string
+  savedCourseKey?: string
   mapCenter: Location
   connected: Boolean
   callers: Im.Map<string, Caller>
@@ -23,6 +24,7 @@ export interface AppState {
   droneAddr: string
   droneKey: string
   spinningConnection: Boolean
+  spinningSaveMission: Boolean
   spinningStartMission: Boolean
   statusBattery: {
     remain: string
@@ -31,10 +33,11 @@ export interface AppState {
   }
   statusPosition: Location
   statusConnected: Boolean
+  modalForFlying: Boolean
 }
 
 class App extends React.Component<{}, AppState> {
-  constructor () {
+  constructor() {
     super()
     this.state = {
       courses: COURSES,
@@ -45,6 +48,7 @@ class App extends React.Component<{}, AppState> {
       droneAddr: '57600',
       droneKey: 'arducopter:1',
       spinningConnection: false,
+      spinningSaveMission: false,
       spinningStartMission: false,
       statusBattery: {
         remain: '-',
@@ -55,19 +59,21 @@ class App extends React.Component<{}, AppState> {
         lat: 0,
         lng: 0,
       },
-      statusConnected: false
+      statusConnected: false,
+      modalForFlying: false,
     }
   }
-  render () {
+
+  render() {
     const s = this
     let { state } = s
     return (
       <div className='app'>
-        <AppStyle/>
-        <Header/>
+        <AppStyle />
+        <Header />
         <div className={ styles.main }>
-          <Controller state={state} setState={s.setState.bind(s)} />
-          <Map state={state} setState={s.setState.bind(s)} />
+          <Controller app={ s } />
+          <Map app={ s } />
         </div>
       </div>
     )

@@ -1,6 +1,6 @@
 import * as sha1 from 'sha1'
 
-export default function auth (prompt, localStorage) {
+export default function auth(prompt, localStorage) {
   if (process.env.NODE_ENV !== 'production') {
     return true
   }
