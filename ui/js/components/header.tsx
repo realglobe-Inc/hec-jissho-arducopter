@@ -2,7 +2,6 @@
  * Site Header
  */
 import * as React from 'react'
-import * as CSSModules from 'react-css-modules'
 const styles = require('../css/header.css')
 
 export default class Header extends React.Component<{}, {}> {

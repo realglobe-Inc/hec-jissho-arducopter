@@ -33,6 +33,7 @@ export interface AppState {
   }
   statusPosition: Location
   statusConnected: Boolean
+  modalFly: Boolean
 }
 
 class App extends React.Component<{}, AppState> {
@@ -58,7 +59,8 @@ class App extends React.Component<{}, AppState> {
         lat: 0,
         lng: 0,
       },
-      statusConnected: false
+      statusConnected: false,
+      modalFly: false,
     }
   }
   render () {

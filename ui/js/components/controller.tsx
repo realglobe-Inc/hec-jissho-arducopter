@@ -7,9 +7,9 @@ import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
 import { connectCaller, startAutoFlight, saveMission, watchDroneState } from '../helpers/drone'
 import { Caller, Course } from '../interfaces/app'
+import ConfirmModal from './confirm_modal'
 import COURSES from '../src/courses'
 const styles = require('../css/controller.css')
-
 
 const C_KEYS = COURSES.map(c => c.key)
 
@@ -64,6 +64,7 @@ class Controller extends React.Component<Props, {}> {
       statusBattery,
       statusPosition,
       statusConnected,
+      modalFly,
     } = s.props.state
     let isSelected = !!selectedCourseKey
     return (
@@ -173,24 +174,28 @@ class Controller extends React.Component<Props, {}> {
           <div className={ connected ? styles.messageHide : styles.message }>
             UI と Android を接続してください
           </div>
-          <div className={ statusConnected ? styles.messageHide : styles.message }>
-            Android と Drone を接続してください
-          </div>
           <div className={ isSelected ? styles.messageHide : styles.message }>
             コースを選択してください
           </div>
           <ApButton
             wide
-            disabled={ !isSelected || !connected || !statusConnected}
-            onTap={s.startFly.bind(s)}
+            disabled={ !savedCourseKey || !connected }
+            onTap={() => { s.props.setState({ modalFly: true }) }}
             spinning={spinningStartMission}
             style={{ borderWidth: '2px', lineHeight: '2em' }}
             >
             飛行開始
           </ApButton>
-
         </div>
-
+        <ConfirmModal
+          message='飛行開始しますか？'
+          yes='はい'
+          no='いいえ'
+          onYes={s.startFly.bind(s)}
+          onNo={() => { s.props.setState({ modalFly: false }) }}
+          visible={modalFly}
+          enterYes={true}
+        />
       </div>
     )
   }
@@ -218,11 +223,9 @@ class Controller extends React.Component<Props, {}> {
 
   startFly () {
     const s = this
-    if (!window.confirm('飛行開始しますか？')) {
-      return
-    }
     s.props.setState({
-      spinningStartMission: true
+      spinningStartMission: true,
+      modalFly: false,
     })
     let {callers, droneKey, droneType, droneAddr} = s.props.state
     let caller = callers.get(droneKey)
@@ -231,7 +234,6 @@ class Controller extends React.Component<Props, {}> {
         s.props.setState({
           spinningStartMission: false
         })
-        window.alert('自動飛行コマンドを送信しました。')
       })
       .catch((e) => {
         window.alert('コマンド送信に失敗しました。')
