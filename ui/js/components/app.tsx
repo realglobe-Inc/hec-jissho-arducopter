@@ -72,8 +72,8 @@ class App extends React.Component<{}, AppState> {
         <AppStyle />
         <Header />
         <div className={ styles.main }>
-          <Controller App={ s } />
-          <Map App={ s } />
+          <Controller app={ s } />
+          <Map app={ s } />
         </div>
       </div>
     )

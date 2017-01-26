@@ -29,7 +29,7 @@ class Drone extends React.Component<any, {}> {
 }
 
 interface Props {
-  App: {
+  app: {
     state: AppState
     setState: any
   }
@@ -41,8 +41,8 @@ class Map extends React.Component<Props, {}> {
 
   render() {
     const s = this
-    const { App } = s.props
-    let { mapCenter } = App.state
+    const { app } = s.props
+    let { mapCenter } = app.state
     return (
       <div className={ styles.wrap }>
         <GoogleMap center={ mapCenter }
@@ -61,13 +61,13 @@ class Map extends React.Component<Props, {}> {
   }
 
   changeCenter({ center }) {
-    this.props.App.setState({ mapCenter: center })
+    this.props.app.setState({ mapCenter: center })
   }
 
   renderMarkers() {
     const s = this
-    const { App } = s.props
-    let { selectedCourseKey } = App.state
+    const { app } = s.props
+    let { selectedCourseKey } = app.state
     if (!selectedCourseKey) {
       return null
     }
@@ -80,8 +80,8 @@ class Map extends React.Component<Props, {}> {
 
   renderDrone() {
     const s = this
-    const { App } = s.props
-    let {statusConnected, statusPosition} = App.state
+    const { app } = s.props
+    let {statusConnected, statusPosition} = app.state
     let {lat, lng} = statusPosition
     if (statusConnected && lat > 0 && lng > 0) {
       return <Drone lat={ lat } lng={ lng } />
