@@ -66,7 +66,7 @@ class Controller extends React.Component<Props, {}> {
     let isSelected = !!selectedCourseKey
     return (
       <div className={ styles.wrap }>
-        <h3 className={ styles.title }>Drone接続</h3>
+        <h3 className={ styles.title }>Android 接続</h3>
         <div className={styles.connectForm}>
           <ApForm id='connect-drone-form' spinning={ spinningConnection }>
             <TextFormField
@@ -97,16 +97,16 @@ class Controller extends React.Component<Props, {}> {
           </ApForm>
         </div>
 
-        <h3 className={ styles.title }>ドローンの状態</h3>
-        <div className=''>
-            <ApField>
-              <ApFieldLabel>
-                状態
-              </ApFieldLabel>
-              <ApFieldValue>
-                { statusConnected ? '接続' : '切断' }
-              </ApFieldValue>
-            </ApField>
+        <h3 className={ styles.title }>Drone 状態</h3>
+        <div>
+          <ApField>
+            <ApFieldLabel>
+              状態
+            </ApFieldLabel>
+            <ApFieldValue>
+              { statusConnected ? '接続' : '切断' }
+            </ApFieldValue>
+          </ApField>
           <ApField>
             <ApFieldLabel>
               残量
@@ -285,7 +285,7 @@ class Controller extends React.Component<Props, {}> {
   setDroneType (e) {
     this.props.setState({ droneType: e.target.value })
   }
-  
+
   setDroneAddr (e) {
     this.props.setState({ droneAddr: e.target.value })
   }
