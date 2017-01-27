@@ -21,7 +21,7 @@ const DroneEvents = {
 const DroneMode = {
   GUIDED: 'GUIDED',
 }
-const DRONE_MODULE = 'arducopter'
+const DRONE_MODULE = 'ArduCopter'
 
 const emptyCheck = (obj) => {
   for (let key of Object.keys(obj)) {
@@ -34,7 +34,7 @@ const emptyCheck = (obj) => {
 /**
  * 指定した Actor Key の Caller 接続する
  */
-export const connectCaller = (key: string) => {
+export const connectCaller = (key: string): Promise<Caller> => {
   return sugoCaller({
     protocol: window.location.protocol,
     host: window.location.host,
@@ -45,7 +45,7 @@ export const connectCaller = (key: string) => {
 /**
  * 飛行開始(Missonは設定済み)
  */
-export const startAutoFlight = (caller: Caller, type: string, addr: string) => {
+export const startAutoFlight = (caller: Caller, type: string, addr: string): Promise<{}> => {
   return new Promise((resolve, reject) => {
     emptyCheck({ caller, type, addr })
     const {
@@ -91,7 +91,7 @@ export const startAutoFlight = (caller: Caller, type: string, addr: string) => {
 /**
  * Drone に Mission を設定する
  */
-export const saveMission = (course: Course, caller: Caller, type: string, addr: string) => {
+export const saveMission = (course: Course, caller: Caller, type: string, addr: string): Promise<{}> => {
   return new Promise((resolve, reject) => {
     emptyCheck({ course, caller, type, addr })
     const {
@@ -177,7 +177,7 @@ export const createMission = (course: Course, takeoffAlt: number, maxAlt: number
 /**
  * Drone の状態を取得し、イベントを監視する
  */
-export const watchDroneState = (caller: Caller, callback, type: string, addr: string) => {
+export const watchDroneState = (caller: Caller, callback, type: string, addr: string): Promise<{}> => {
   emptyCheck({ caller, callback, type, addr })
   const {
     BATTERY,
