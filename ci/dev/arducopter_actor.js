@@ -11,14 +11,14 @@ const {
   KEY = 'arducopter:1'
 } = process.env
 
-function connectArducopterActor (port) {
-  return co(function * () {
+function connectArducopterActor(port) {
+  return co(function* () {
     let actor = Actor({
       key: KEY,
       protocol: 'http',
       host: `localhost:${port}`,
       modules: {
-        arducopter: new ArducopterModule({})
+        ArduCopter: new ArducopterModule({})
       },
       path: '/arducopter/sugos/arducopter/socket.io'
     })

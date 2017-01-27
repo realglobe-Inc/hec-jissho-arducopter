@@ -57,6 +57,11 @@ interface Props {
 }
 
 class Controller extends React.Component<Props, {}> {
+  constructor() {
+    super()
+    autoBind(this)
+  }
+
   render() {
     const s = this
     const { app } = s.props
@@ -259,30 +264,40 @@ class Controller extends React.Component<Props, {}> {
   connectAndroid() {
     const s = this
     const { app } = s.props
-    let { droneKey } = app.state
+    let { callers, droneKey, droneAddr, droneType } = app.state
     app.setState({
       spinningConnection: true
     })
-    connectCaller(droneKey)
+    Promise.resolve()
+      .then(() => {
+        let caller = callers.get(droneKey, null)
+        if (caller) {
+          return caller
+        } else {
+          return connectCaller(droneKey)
+        }
+      })
       .then((caller: Caller) => {
-        let { droneType, droneAddr, callers } = app.state
-        watchDroneState(caller, s.updateDroneInfo, droneType, droneAddr)
         app.setState({
           connected: true,
           callers: callers.set(droneKey, caller)
+        })
+        return caller
+      })
+      .then((caller: Caller) => {
+        return watchDroneState(caller, s.updateDroneInfo, droneType, droneAddr)
+      })
+      .then(() => {
+        app.setState({
+          spinningConnection: false,
         })
       })
       .catch(e => {
         window.alert('Actorとの接続に失敗しました。')
         console.error(e)
         app.setState({
-          connected: false,
           spinningConnection: false,
-        })
-      })
-      .then(() => {
-        app.setState({
-          spinningConnection: false,
+          connected: false
         })
       })
   }
