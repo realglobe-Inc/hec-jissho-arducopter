@@ -10,7 +10,7 @@ const debug = require('debug')('hec:dev')
 const app = require('./app')
 const connectArducopterActor = require('../ci/dev/arducopter_actor')
 
-co(function * () {
+co(function* () {
   // app
   yield app()
 
@@ -19,5 +19,7 @@ co(function * () {
   debug(`Dev server listening on port ${port.DEV}`)
 
   // Arducopter
-  yield connectArducopterActor(port.DEV)
+  if (process.env.DRONE_MOCK === 1) {
+    yield connectArducopterActor(port.DEV)
+  }
 }).catch(err => console.error(err))
