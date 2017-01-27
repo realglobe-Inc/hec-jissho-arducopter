@@ -24,6 +24,7 @@ export interface CLocation {
 export interface Course {
   key: string
   body: Im.List<CLocation>
+  uniqueNumber: number
 }
 
 /**

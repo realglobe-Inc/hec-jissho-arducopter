@@ -8,6 +8,7 @@ import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
 import { connectCaller, startAutoFlight, saveMission, watchDroneState } from '../helpers/drone'
 import { Caller, Course } from '../interfaces/app'
+import { calcMissionUniqueNum } from '../helpers/app'
 import ConfirmModal from './confirm_modal'
 import COURSES from '../src/courses'
 const styles = require('../css/controller.css')
@@ -174,11 +175,11 @@ class Controller extends React.Component<Props, {}> {
             <ApButton
               wide
               spinning={ spinningSaveMission }
-              disabled={ !connected || !selectedCourseKey || !!savedCourseKey }
+              disabled={ !connected || !selectedCourseKey }
               onTap={ s.saveCourse }
               style={ { borderWidth: '2px', lineHeight: '1.8em' } }
               >
-              { !!savedCourseKey ? 'コース保存済み' : 'コース決定' }
+              コース保存
             </ApButton>
           </div>
         </div>
@@ -188,8 +189,11 @@ class Controller extends React.Component<Props, {}> {
           <div className={ connected ? styles.messageHide : styles.message }>
             UI と Android を接続してください
           </div>
-          <div className={ isSelected ? styles.messageHide : styles.message }>
+          <div className={ !!savedCourseKey ? styles.messageHide : styles.message }>
             コースを選択してください
+          </div>
+          <div className={ styles.message }>
+            { savedCourseKey }
           </div>
           <ApButton
             wide
@@ -309,6 +313,7 @@ class Controller extends React.Component<Props, {}> {
       battery,
       coordinate,
       connected,
+      mission,
     } = data
     if (battery) {
       app.setState({
@@ -326,6 +331,17 @@ class Controller extends React.Component<Props, {}> {
     if (connected) {
       app.setState({
         statusConnected: connected
+      })
+    }
+    if (mission) {
+      let { commands } = mission
+      if (commands.length === 0) {
+        return
+      }
+      let number = calcMissionUniqueNum(commands)
+      let course = COURSES.find(c => c.uniqueNumber === number)
+      app.setState({
+        savedCourseKey: course.key
       })
     }
   }

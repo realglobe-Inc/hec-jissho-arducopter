@@ -161,7 +161,7 @@ export const saveMission = (course: Course, caller: Caller, type: string, addr: 
       reject(new Error(`Module not found '${ DRONE_MODULE }'`))
       return
     }
-    let timeoutId = setTimeout(() => reject(new Error('Timeout')), WAIT_CONNECT + 5000)
+    let timeoutId = setTimeout(() => reject(new Error('Timeout')), WAIT_CONNECT + 50000)
 
     Promise.resolve()
       .then(() => {
@@ -177,6 +177,9 @@ export const saveMission = (course: Course, caller: Caller, type: string, addr: 
         return setGuideMode(arducopter)
       })
       .then(() => {
+        return arducopter.getMission()
+      })
+      .then((mis) => {
         arducopter.once(MISSION_SAVED, () => {
           debug(MISSION_SAVED)
           clearTimeout(timeoutId)
@@ -251,6 +254,10 @@ export const watchDroneState = (caller: Caller, notify, type: string, addr: stri
     debug(DISARMED)
   })
 
+  arducopter.on('mission', (data) => {
+    debug('MISSION', data)
+  })
+
   return Promise.resolve()
     .then(() => {
       return connectDrone(arducopter, type, addr)
@@ -265,6 +272,10 @@ export const watchDroneState = (caller: Caller, notify, type: string, addr: stri
     })
     .then(({ coordinate }) => {
       notify({ coordinate })
+      return arducopter.getMission()
+    })
+    .then((mission) => {
+      notify({ mission })
       return arducopter.disableEvents(null)
     })
     .then(() => {

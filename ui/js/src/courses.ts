@@ -1,5 +1,7 @@
 import { Course, CLocation } from '../interfaces/app'
 import * as Im from 'immutable'
+import { calcMissionUniqueNum } from '../helpers/app'
+import { createMission } from '../helpers/drone'
 
 export const COURSES: Course[] = [
   'A1',
@@ -10,7 +12,11 @@ export const COURSES: Course[] = [
   'C2',
 ].map(name => ({
   key: name,
-  body: Im.List<CLocation>(require(`./route_${name.toLowerCase()}.json`))
+  body: Im.List<CLocation>(require(`./route_${ name.toLowerCase() }.json`))
+})).map((course: Course) => ({
+  key: course.key,
+  body: course.body,
+  uniqueNumber: calcMissionUniqueNum(createMission(course, 0, 0))
 }))
 
 export default COURSES
