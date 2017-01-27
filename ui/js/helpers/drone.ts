@@ -194,7 +194,7 @@ export const watchDroneState = (caller: Caller, callback, type: string, addr: st
   }
 
   arducopter.on(BATTERY, (battery) => callback({ battery }))
-  arducopter.on(POSITION, (coordinate) => callback({ coordinate }))
+  arducopter.on(POSITION, ({ coordinate }) => callback({ coordinate }))
   arducopter.on(CONNECTED, () => callback({ connected: true }))
   arducopter.on(DISCONNECTED, () => callback({ connected: false }))
 
@@ -224,7 +224,7 @@ export const watchDroneState = (caller: Caller, callback, type: string, addr: st
     .then(() => {
       return arducopter.getPosition()
     })
-    .then((coordinate) => {
+    .then(({ coordinate }) => {
       callback({ coordinate })
     })
     .then(() => {
