@@ -10,6 +10,10 @@ export const COURSES: Course[] = [
   'B2',
   'C1',
   'C2',
+  'TEST_RG',
+  'TEST_F1',
+  'TEST_F2',
+  'TEST_F3',
 ].map(name => ({
   key: name,
   body: Im.List<CLocation>(require(`./route_${ name.toLowerCase() }.json`))
