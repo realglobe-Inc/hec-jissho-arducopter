@@ -8,6 +8,7 @@ import { ApButton } from 'apeman-react-button'
 import { AppState } from './app'
 import { connectCaller, startAutoFlight, saveMission, watchDroneState } from '../helpers/drone'
 import { Caller, Course } from '../interfaces/app'
+import { calcMissionUniqueNum } from '../helpers/app'
 import ConfirmModal from './confirm_modal'
 import COURSES from '../src/courses'
 const styles = require('../css/controller.css')
@@ -16,7 +17,7 @@ const C_KEYS = COURSES.map(c => c.key)
 
 interface TextFormFieldProps {
   label: string
-  value: string
+  value: string | number
   onChange: any
   completed: Boolean
 }
@@ -72,6 +73,7 @@ class Controller extends React.Component<Props, {}> {
       droneType,
       droneAddr,
       droneKey,
+      droneDelay,
       spinningConnection,
       spinningSaveMission,
       spinningStartMission,
@@ -174,11 +176,11 @@ class Controller extends React.Component<Props, {}> {
             <ApButton
               wide
               spinning={ spinningSaveMission }
-              disabled={ !connected || !selectedCourseKey || !!savedCourseKey }
+              disabled={ !connected || !selectedCourseKey }
               onTap={ s.saveCourse }
               style={ { borderWidth: '2px', lineHeight: '1.8em' } }
               >
-              { !!savedCourseKey ? 'コース保存済み' : 'コース決定' }
+              コース保存
             </ApButton>
           </div>
         </div>
@@ -188,9 +190,21 @@ class Controller extends React.Component<Props, {}> {
           <div className={ connected ? styles.messageHide : styles.message }>
             UI と Android を接続してください
           </div>
-          <div className={ isSelected ? styles.messageHide : styles.message }>
+          <div className={ !!savedCourseKey ? styles.messageHide : styles.message }>
             コースを選択してください
           </div>
+          <div className={ styles.message }>
+            { !!savedCourseKey ? `コース ${ savedCourseKey }` : '' }
+          </div>
+          <ApForm id='start-drone-form'>
+            <TextFormField
+              label='DELAY'
+              value={ droneDelay }
+              onChange={ s.setDroneDelay }
+              completed={ false }
+              />
+          </ApForm>
+
           <ApButton
             wide
             disabled={ !savedCourseKey || !connected }
@@ -247,9 +261,9 @@ class Controller extends React.Component<Props, {}> {
       spinningStartMission: true,
       modalForFlying: false,
     })
-    let {callers, droneKey, droneType, droneAddr} = app.state
+    let {callers, droneKey, droneType, droneAddr, droneDelay} = app.state
     let caller = callers.get(droneKey)
-    startAutoFlight(caller, droneType, droneAddr)
+    startAutoFlight(caller, droneType, droneAddr, droneDelay)
       .catch((e) => {
         window.alert('コマンド送信に失敗しました。')
         console.error(e)
@@ -309,6 +323,7 @@ class Controller extends React.Component<Props, {}> {
       battery,
       coordinate,
       connected,
+      mission,
     } = data
     if (battery) {
       app.setState({
@@ -326,6 +341,17 @@ class Controller extends React.Component<Props, {}> {
     if (connected) {
       app.setState({
         statusConnected: connected
+      })
+    }
+    if (mission) {
+      let { commands } = mission
+      if (commands.length === 0) {
+        return
+      }
+      let number = calcMissionUniqueNum(commands)
+      let course = COURSES.find(c => c.uniqueNumber === number)
+      app.setState({
+        savedCourseKey: course.key
       })
     }
   }
@@ -364,6 +390,10 @@ class Controller extends React.Component<Props, {}> {
 
   setDroneAddr(e) {
     this.props.app.setState({ droneAddr: e.target.value })
+  }
+
+  setDroneDelay(e) {
+    this.props.app.setState({ droneDelay: Number(e.target.value) })
   }
 }
 

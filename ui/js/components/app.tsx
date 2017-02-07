@@ -23,6 +23,7 @@ export interface AppState {
   droneType: string
   droneAddr: string
   droneKey: string
+  droneDelay: number
   spinningConnection: Boolean
   spinningSaveMission: Boolean
   spinningStartMission: Boolean
@@ -47,6 +48,7 @@ class App extends React.Component<{}, AppState> {
       droneType: 'udp',
       droneAddr: 'localhost',
       droneKey: 'arducopter:1',
+      droneDelay: 5,
       spinningConnection: false,
       spinningSaveMission: false,
       spinningStartMission: false,
