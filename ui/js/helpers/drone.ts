@@ -88,7 +88,7 @@ export const setGuideMode = (arducopter): Promise<{}> => {
 /**
  * 飛行開始(Missonは設定済み)
  */
-export const startAutoFlight = (caller: Caller, type: string, addr: string): Promise<{}> => {
+export const startAutoFlight = (caller: Caller, type: string, addr: string, delay: number): Promise<{}> => {
   return new Promise((resolve, reject) => {
     assert.ok(caller)
     assert.ok(type)
@@ -123,10 +123,11 @@ export const startAutoFlight = (caller: Caller, type: string, addr: string): Pro
         return setGuideMode(arducopter)
       })
       .then(() => {
-        return arducopter.startMission(true, true)
+        return arducopter.startMissionWithDelay(delay, true, true)
       })
       .then(() => {
         clearTimeout(timeoutId)
+        window.alert(`${ delay }秒後に飛行開始します。`)
         resolve()
       })
       .catch((e) => {
@@ -153,7 +154,7 @@ export const saveMission = (course: Course, caller: Caller, type: string, addr: 
     } = DroneMode
     // Config
     const takeoffAlt = 10
-    const maxAlt = 50
+    const maxAlt = 30
     const mission = createMission(course, takeoffAlt, maxAlt)
 
     let arducopter = caller.get(DRONE_MODULE)
@@ -161,7 +162,7 @@ export const saveMission = (course: Course, caller: Caller, type: string, addr: 
       reject(new Error(`Module not found '${ DRONE_MODULE }'`))
       return
     }
-    let timeoutId = setTimeout(() => reject(new Error('Timeout')), WAIT_CONNECT + 50000)
+    let timeoutId = setTimeout(() => reject(new Error('Timeout')), WAIT_CONNECT)
 
     Promise.resolve()
       .then(() => {
@@ -177,9 +178,6 @@ export const saveMission = (course: Course, caller: Caller, type: string, addr: 
         return setGuideMode(arducopter)
       })
       .then(() => {
-        return arducopter.getMission()
-      })
-      .then((mis) => {
         arducopter.once(MISSION_SAVED, () => {
           debug(MISSION_SAVED)
           clearTimeout(timeoutId)
